@@ -32,7 +32,17 @@ if __name__ == '__main__':
         elif line == 'r':
             # 启动小车
             direction.update(0)
-            break
+            try:
+                while True:
+                    pic, reticlePic = camera.getGrayPic()
+                    loss = track.computeLoss(pic)
+                    direction.update(loss)
+                    cv2.imshow("display", reticlePic)
+                    cv2.waitKey(100)
+                    # time.sleep(0.1)
+            
+            except KeyboardInterrupt:
+                pass
             
 
 
@@ -45,14 +55,4 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
     # print(track.computeLoss(pic))
 
-    try:
-        while True:
-            pic, reticlePic = camera.getGrayPic()
-            loss = track.computeLoss(pic)
-            direction.update(loss)
-            cv2.imshow("display", reticlePic)
-            cv2.waitKey(100)
-            # time.sleep(0.1)
     
-    except KeyboardInterrupt:
-        pass
