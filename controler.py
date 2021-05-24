@@ -12,7 +12,6 @@ class directionControler:
     def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty = 80):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
-        GPIO.setup([LS, RS],GPIO.IN)
         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
         GPIO.output([I1, I4], GPIO.HIGH)
         self.pwma = GPIO.PWM(EA, FREQUENCY)
@@ -27,6 +26,7 @@ class directionControler:
 
 
     def update(self, loss):
+        # print('loss:', loss, end='')
         if loss > 0:
             if self.L_pre_duty < self.ideal_duty:
                 self.L_pre_duty = self.L_control.update(loss)
@@ -37,6 +37,7 @@ class directionControler:
                 self.L_pre_duty = self.L_control.update(loss)
             else:
                 self.R_pre_duty = self.R_control.update(loss)
+        print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
         self.pwma.ChangeDutyCycle(self.L_pre_duty)
         self.pwmb.ChangeDutyCycle(self.R_pre_duty)
 
@@ -54,11 +55,16 @@ class speedControler(threading.Thread):
         self.lspeed = 0
         self.lcounter = 0
         self.rcounter = 0
+        # control the thread end
+        self.isStop = True
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup([LS, RS],GPIO.IN)
         GPIO.add_event_detect(LS,GPIO.RISING,callback=self.__my_callback)
         GPIO.add_event_detect(RS,GPIO.RISING,callback=self.__my_callback)
 
     def run(self):
-        while True:
+        self.isStop = False
+        while self.isStop:
             self.rspeed=(self.rcounter/20.00)
             self.lspeed=(self.lcounter/20.00)
             self.rcounter = 0
@@ -67,6 +73,9 @@ class speedControler(threading.Thread):
 
     def speedLoss(self):
         return self.rspeed - self.lspeed
+    
+    def stop(self):
+        self.isStop = True
 
     def __my_callback(self, channel):
         if (channel==LS):

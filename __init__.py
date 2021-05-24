@@ -14,7 +14,8 @@ if __name__ == '__main__':
     direction = directionControler(**DIRECTION_KWARGS)
 
     while True:
-        line = input("请输入指令: ")
+        print('q -- exit, i -- update the vertical sum, r -- start run')
+        line = input("Please Enter Order: ")
         if line == 'q':
             break
         elif line == 'i':
@@ -27,6 +28,7 @@ if __name__ == '__main__':
                 if key == ord('x'):
                     track.updateVerticalSum(pic)
                 if key == ord('q'):
+                    cv2.destroyAllWindows()
                     break
 
         elif line == 'r':
@@ -35,14 +37,18 @@ if __name__ == '__main__':
             try:
                 while True:
                     pic, reticlePic = camera.getGrayPic()
-                    loss = track.computeLoss(pic)
+                    loss = track.computeLoss(pic, '')
                     direction.update(loss)
                     cv2.imshow("display", reticlePic)
-                    cv2.waitKey(100)
+                    key= cv2.waitKey(100) & 0xFF
+                    if key == ord('q'):
+                        break
                     # time.sleep(0.1)
             
             except KeyboardInterrupt:
                 pass
+            cv2.destroyAllWindows()
+            print('Stopped !!')
             
 
 

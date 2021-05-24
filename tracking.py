@@ -17,23 +17,29 @@ class tracking:
 
 
 
-    def computeLoss(self, frame):
+    def computeLoss(self, frame, end = '\n'):
         loss = 0
         vertical, horizontal =  self.__getTargetBlock(frame)
-        print('vertical:')
-        print(vertical)
-        print('horizontal:')
-        print(horizontal)
+        # print('vertical:')
+        # print(vertical)
+        # print('horizontal:')
+        # print(horizontal)
         currentVerticalSum = self.__computeVerticalSum(vertical)
+        print(' verticalSum:', currentVerticalSum, end='')
         if currentVerticalSum < self.verticalSum * self.verticalLossBound:
             loss = self.__computeHorizontalLoss(horizontal)
+            print(' horizontalLoss:', loss, end='')
         else:
             loss = self.speedThread.speedLoss()
+            print(' speedLoss:', loss, end='')
+        print('', end = end)
         return loss
 
     def updateVerticalSum(self, frame):
         vertical, _ = self.__getTargetBlock(frame)
-        self.verticalSum = self.__computeVerticalSum(vertical)
+        verticalSum = self.__computeVerticalSum(vertical)
+        print('update vertical sum: ', verticalSum)
+        self.verticalSum = verticalSum
 
     def __computeVerticalSum(self, vertical):
         sum = 0
@@ -73,4 +79,7 @@ class tracking:
             start += i
             res.append(i)
         return res
+
+    def __del__(self):
+        self.speedThread.stop()
 

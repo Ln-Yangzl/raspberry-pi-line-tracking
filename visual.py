@@ -11,6 +11,7 @@ class visual:
 
     def getOriginalPic(self):
         # ret, frame = self.cap.read()
+        frame = cv2.imread('pic.png')
         return frame
 
     def getGrayPic(self):
@@ -24,7 +25,7 @@ class visual:
     def __showReticle(self, frame):
         picHeight = len(frame)
         picWidth = len(frame[0])
-        print(picHeight, picWidth)
+        # print(picHeight, picWidth)
         vertical_X = picWidth//2 - self.verticalWidth//2
         vertical_Y = picHeight//2
         horizontal_X = picWidth//2 - self.horizontalWidth//2
@@ -37,11 +38,11 @@ class visual:
         # print(frame)
         # print(type(frame))
         for i in range(lenX):
-            print(y,x,i)
+            # print(y,x,i)
             frame[y][x+i] = 100
             frame[y-lenY] = 100
         for i in range(lenY):
-            print(y,x,i)
+            # print(y,x,i)
             frame[y-i][x] = 100
             frame[y-i][x+lenX] = 100
         return frame
