@@ -2,7 +2,8 @@ import cv2
 
 class visual:
 
-    def __init__(self, camera_num = 0, verticalHeight = 180, verticalWidth = 64, horizontalHeight = 48, horizontalWidth = 320):
+    def __init__(self, camera_num = 0, verticalHeight = 180, verticalWidth = 64, horizontalHeight = 48, horizontalWidth = 320, offset = 0):
+        self.offset = offset
         self.verticalHeight = verticalHeight
         self.verticalWidth = verticalWidth
         self.horizontalHeight = horizontalHeight
@@ -27,9 +28,9 @@ class visual:
         picWidth = len(frame[0])
         # print(picHeight, picWidth)
         vertical_X = picWidth//2 - self.verticalWidth//2
-        vertical_Y = picHeight//2
+        vertical_Y = picHeight//2 + self.offset
         horizontal_X = picWidth//2 - self.horizontalWidth//2
-        horizontal_Y = picHeight//2
+        horizontal_Y = picHeight//2 + self.offset
         frame = self.__reticle(frame, vertical_X, vertical_Y, self.verticalWidth, self.verticalHeight)
         frame = self.__reticle(frame, horizontal_X, horizontal_Y, self.horizontalWidth, self.horizontalHeight)
         return frame

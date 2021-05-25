@@ -2,7 +2,8 @@ from controler import speedControler
 
 class tracking:
 
-    def __init__(self, verticalHeight = 20, verticalWidth = 4, horizontalHeight = 4, horizontalWidth = 20, verticalLossBound = 0.8, lossScale = 0.005):
+    def __init__(self, verticalHeight = 20, verticalWidth = 4, horizontalHeight = 4, horizontalWidth = 20, offset = 0, verticalLossBound = 0.8, lossScale = 0.005):
+        self.offset = offset
         self.verticalLossBound = verticalLossBound
         self.lossScale = lossScale
         self.verticalSum = 100000000000000000
@@ -60,9 +61,9 @@ class tracking:
         picHeight = len(frame)
         picWidth = len(frame[0])
         vertical_X = picWidth//2 - self.verticalWidth//2
-        vertical_Y = picHeight//2
+        vertical_Y = picHeight//2 + self.offset
         horizontal_X = picWidth//2 - self.horizontalWidth//2
-        horizontal_Y = picWidth//2
+        horizontal_Y = picWidth//2 + self.offset
         vertical = []
         horizontal = []
         for i in range(self.verticalHeight):

@@ -14,7 +14,8 @@ RETICLE_SHAPE = {
     "verticalHeight": 180,
     "verticalWidth": 64,
     "horizontalHeight": 48,
-    "horizontalWidth": 320
+    "horizontalWidth": 320,
+    "offset": 0
 }
 
 LOSS_KWARGS = {
