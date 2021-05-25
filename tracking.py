@@ -2,7 +2,7 @@ from controler import speedControler
 
 class tracking:
 
-    def __init__(self, verticalHeight = 20, verticalWidth = 4, horizontalHeight = 4, horizontalWidth = 20, offset = 0, verticalLossBound = 0.8, lossScale = 0.005):
+    def __init__(self, verticalHeight, verticalWidth, horizontalHeight, horizontalWidth, offset, verticalLossBound, lossScale):
         self.offset = offset
         self.verticalLossBound = verticalLossBound
         self.lossScale = lossScale
@@ -53,8 +53,8 @@ class tracking:
     def __computeHorizontalLoss(self, horizontal):
         res = 0
         for i in range(self.horizontalHeight):
-            res += sum(map(lambda x,y:(not(not(x)))*y, horizontal[i], self.horizontalWeights))
-        return res/self.lossScale
+            res += sum(map(lambda x,y:(not(not(x)))*(y), horizontal[i], self.horizontalWeights))
+        return res*self.lossScale
 
 
     def __getTargetBlock(self, frame):
@@ -73,12 +73,20 @@ class tracking:
         return vertical, horizontal
 
 
+    # def __computeHorizontalWeights(self, horizontalWidth):
+    #     start = -1
+    #     res = []
+    #     for i in range(horizontalWidth):
+    #         if i == horizontalWidth // 2:
+    #             start = -start
+    #         res.append(start)
+    #     return res
     def __computeHorizontalWeights(self, horizontalWidth):
         start = -(horizontalWidth//2)
         res = []
         for i in range(horizontalWidth):
-            start += i
-            res.append(i)
+            start += 1
+            res.append(start)
         return res
 
     def __del__(self):

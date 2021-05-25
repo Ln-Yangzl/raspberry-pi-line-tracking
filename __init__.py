@@ -1,7 +1,7 @@
 from controler import directionControler
 from visual import visual
 import cv2
-import time
+import RPi.GPIO as GPIO
 from tracking import tracking
 from constant import *
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
         elif line == 'r':
             # 启动小车
-            direction.update(0)
+            direction.update(0,isStop=False, isRun=True)
             try:
                 while True:
                     pic, reticlePic = camera.getGrayPic()
@@ -42,6 +42,7 @@ if __name__ == '__main__':
                     cv2.imshow("display", reticlePic)
                     key= cv2.waitKey(100) & 0xFF
                     if key == ord('q'):
+                        direction.update(0, isStop=True)
                         break
                     # time.sleep(0.1)
             
@@ -49,6 +50,7 @@ if __name__ == '__main__':
                 pass
             cv2.destroyAllWindows()
             print('Stopped !!')
+        # GPIO.cleanup()
             
 
 

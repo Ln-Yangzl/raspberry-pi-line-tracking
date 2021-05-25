@@ -23,20 +23,33 @@ class directionControler:
         self.ideal_duty = target_duty
         self.L_pre_duty = L_init_duty
         self.R_pre_duty = R_init_duty
+        self.L_init_duty = L_init_duty
+        self.R_init_duty = R_init_duty
 
 
-    def update(self, loss):
+    def update(self, loss, isStop = False, isRun = False):
         # print('loss:', loss, end='')
-        if loss > 0:
-            if self.L_pre_duty < self.ideal_duty:
-                self.L_pre_duty = self.L_control.update(loss)
-            else:
-                self.R_pre_duty = self.R_control.update(loss)
-        elif loss < 0:
-            if self.L_pre_duty > self.ideal_duty:
-                self.L_pre_duty = self.L_control.update(loss)
-            else:
-                self.R_pre_duty = self.R_control.update(loss)
+        if self.L_pre_duty < self.ideal_duty:
+            self.L_pre_duty = self.L_control.update(-loss)
+        else:
+            self.R_pre_duty = self.R_control.update(loss)
+        # if loss > 0:
+        #     if self.L_pre_duty < self.ideal_duty:
+        #         self.L_pre_duty = self.L_control.update(-loss)
+        #     else:
+        #         self.R_pre_duty = self.R_control.update(loss)
+        # elif loss < 0:
+        #     if self.L_pre_duty > self.ideal_duty:
+        #         self.L_pre_duty = self.L_control.update(-loss)
+        #     else:
+        #         self.R_pre_duty = self.R_control.update(loss)
+        if isStop:
+            self.L_pre_duty = 0
+            self.R_pre_duty = 0
+        if isRun:
+            self.L_init_duty = self.L_init_duty
+            self.R_init_duty = self.R_init_duty
+
         print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
         self.pwma.ChangeDutyCycle(self.L_pre_duty)
         self.pwmb.ChangeDutyCycle(self.R_pre_duty)
