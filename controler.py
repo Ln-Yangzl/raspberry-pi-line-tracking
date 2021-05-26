@@ -30,9 +30,9 @@ class directionControler:
     def update(self, loss, isStop = False, isRun = False):
         # print('loss:', loss, end='')
         if self.L_pre_duty < self.ideal_duty:
-            self.L_pre_duty = self.L_control.update(-loss)
+            self.L_pre_duty = self.L_control.update(loss)
         else:
-            self.R_pre_duty = self.R_control.update(loss)
+            self.R_pre_duty = self.R_control.update(-loss)
         # if loss > 0:
         #     if self.L_pre_duty < self.ideal_duty:
         #         self.L_pre_duty = self.L_control.update(-loss)
@@ -86,6 +86,9 @@ class speedControler(threading.Thread):
 
     def speedLoss(self):
         return self.rspeed - self.lspeed
+    
+    def getSpeed(self):
+        return self.lspeed, self.rspeed
     
     def stop(self):
         self.isStop = True

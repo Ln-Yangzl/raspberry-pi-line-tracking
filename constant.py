@@ -1,3 +1,5 @@
+import math
+
 DIRECTION_KWARGS = {
     "LP": 30,
     "LI": 0.06,
@@ -21,4 +23,14 @@ RETICLE_SHAPE = {
 LOSS_KWARGS = {
     "verticalLossBound": 0.8,
     'lossScale': 0.00000001
+}
+
+HOUGH_KWARGS = {
+    "rho": 1,
+    "theta": math.pi/180,
+    "threshold": 400,
+    "minLineLength": 400,
+    "maxLineGap": 400,
+    "lineBoundary": 520,
+    "lossBoundary": 0.1
 }

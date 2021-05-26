@@ -12,7 +12,7 @@ class visual:
 
     def getOriginalPic(self):
         ret, frame = self.cap.read()
-        # frame = cv2.imread('pic.png')
+        frame = cv2.imread('pic.png')
         return frame
 
     def getGrayPic(self):
@@ -20,8 +20,8 @@ class visual:
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY) 
         # frame = cv2.equalizeHist(frame)
         ret,frame=cv2.threshold(frame,130,255,cv2.THRESH_BINARY_INV)
-        reticleFrame = self.__showReticle(frame)
-        return frame, reticleFrame
+        # reticleFrame = self.__showReticle(frame)
+        return frame
 
     def __showReticle(self, frame):
         picHeight = len(frame)
