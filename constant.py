@@ -30,7 +30,9 @@ HOUGH_KWARGS = {
     "theta": math.pi/180,
     "threshold": 400,
     "minLineLength": 400,
-    "maxLineGap": 400,
+    "maxLineGap": 200,
     "lineBoundary": 520,
-    "lossBoundary": 0.1
+    "lossBoundary": 0.1,
+    "slopScale": 0.1,
+    "offsetScale": 0.001
 }
