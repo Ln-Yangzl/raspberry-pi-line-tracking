@@ -27,6 +27,7 @@ class houghTracking():
     def __findLine(self, lines):
         if type(lines) == type(None):
             lines = [[[0,0,0,0]]]
+        print('get line nums:', len(lines))
         slop = 1<<31
         sign = True
         line = ((320,260),(320,260))
@@ -36,8 +37,10 @@ class houghTracking():
                 currentSlop = 1<<31
                 if y2 < self.lineBoundary:
                     currentSlop = self.__computeSlop(x1,y1,x2,y2)
+                    print('current slop:',currentSlop)
                     currentSign = currentSlop > 0
                 if abs(currentSlop) < slop:
+                    print('loged !')
                     slop = abs(currentSlop)
                     sign = currentSign
                     line = ((x1,y1),(x2,y2))

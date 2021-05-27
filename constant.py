@@ -20,19 +20,29 @@ RETICLE_SHAPE = {
     "offset": 0
 }
 
+# for tracking mode
 LOSS_KWARGS = {
     "verticalLossBound": 0.8,
     'lossScale': 0.00000001
 }
 
+# for houghTracking mode
 HOUGH_KWARGS = {
     "rho": 1,
     "theta": math.pi/180,
     "threshold": 400,
-    "minLineLength": 400,
-    "maxLineGap": 200,
+    "minLineLength": 200,
+    "maxLineGap": 400,
     "lineBoundary": 520,
     "lossBoundary": 0.1,
     "slopScale": 0.1,
     "offsetScale": 0.001
+}
+
+EDGE_KWARGS = {
+    "firsetLineY": 400,
+    "secondLineY": 200,
+    "lossBoundary": 0.1,
+    "slopScale": 0.1,
+    "slopBound": 1
 }

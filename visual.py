@@ -11,8 +11,8 @@ class visual:
         self.cap = cv2.VideoCapture(camera_num)
 
     def getOriginalPic(self):
-        ret, frame = self.cap.read()
-        frame = cv2.imread('pic.png')
+        # ret, frame = self.cap.read()
+        frame = cv2.imread('test3.png')
         return frame
 
     def getGrayPic(self):
