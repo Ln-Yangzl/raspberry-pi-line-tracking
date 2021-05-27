@@ -31,11 +31,12 @@ class edgeTracking:
         # 限制斜率最大绝对值为1，避免正切值在角度过大时值过大
         slop = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
         # print('slop: %f'%slop)
-        loss = slop * self.slopScale
+        loss = slop
         if abs(loss) < self.lossBoundary:
             loss = self.speedThread.speedLoss()
             print('speedLoss:%.4f'%loss, end=' ')
         else:
+            loss = slop * self.slopScale
             print('slopLoss:%.4f'%loss, end=' ')
         print('\t', end='')
         print('lspeed:%.2f rspeed:%.2f'%(self.speedThread.getSpeed()), end=end)
