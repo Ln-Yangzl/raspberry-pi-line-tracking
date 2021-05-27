@@ -16,8 +16,8 @@ class edgeTracking:
         mid = width // 2
         # height = len(frame)
         # mid = len(frame[0]) // 2
-        frame = cv2.GaussianBlur(frame,(3,3),0)
-        frame = cv2.Canny(frame, 50, 150, apertureSize=3)
+        # frame = cv2.GaussianBlur(frame,(3,3),0)
+        frame = cv2.Canny(frame, 50, 120, apertureSize=3)
         x1, y1, x2, y2 = self.__getEdgePos(frame)
         # print('get position:', x1, y1, x2, y2)
         slop1 = self.__computeSlop(mid, height, x1, y1)

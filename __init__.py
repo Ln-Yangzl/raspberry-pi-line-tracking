@@ -22,7 +22,7 @@ if __name__ == '__main__':
                 pic = camera.getGrayPic()
                 loss, pic = track.computeLoss(pic)
                 cv2.imshow("display", pic)
-                key = cv2.waitKey(0) & 0xFF
+                key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
                     cv2.destroyAllWindows()
                     break
@@ -31,11 +31,13 @@ if __name__ == '__main__':
             # 启动小车
             direction.update(0,isStop=False, isRun=True)
             track.start()
+            out = cv2.VideoWriter("testlog.avi", cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), 100, (640, 480),isColor = False)
             try:
                 while True:
                     pic = camera.getGrayPic()
                     loss, pic = track.computeLoss(pic, ' ')
                     direction.update(loss)
+                    out.write(pic)
                     cv2.imshow("display", pic)
                     key= cv2.waitKey(100) & 0xFF
                     if key == ord('q'):

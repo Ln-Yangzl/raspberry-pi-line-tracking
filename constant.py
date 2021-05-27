@@ -1,5 +1,6 @@
 import math
 
+
 DIRECTION_KWARGS = {
     "LP": 30,
     "LI": 0.06,
@@ -9,11 +10,11 @@ DIRECTION_KWARGS = {
     "RI": 0.01,
     "RD": 23,
     "R_init_duty": 20,
-    "target_duty": 20
+    "target_duty": 50
 }
 
 RETICLE_SHAPE = {
-    "verticalHeight": 180, # max 520
+    "verticalHeight": 180, # max 480
     "verticalWidth": 100,   # max 640
     "horizontalHeight": 48,
     "horizontalWidth": 480,
@@ -34,15 +35,15 @@ HOUGH_KWARGS = {
     "minLineLength": 200,
     "maxLineGap": 400,
     "lineBoundary": 520,
-    "lossBoundary": 0.1,
+    "lossBoundary": 0.5,
     "slopScale": 0.1,
     "offsetScale": 0.001
 }
 
 EDGE_KWARGS = {
-    "firstLineY": 400,
-    "secondLineY": 200,
+    "firstLineY": 350,
+    "secondLineY": 100,
     "lossBoundary": 0.1,
-    "slopScale": 0.1,
+    "slopScale": 1,
     "slopBound": 1
 }
