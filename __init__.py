@@ -30,6 +30,7 @@ if __name__ == '__main__':
         elif line == 'r':
             # 启动小车
             direction.update(0,isStop=False, isRun=True)
+            track.start()
             try:
                 while True:
                     pic = camera.getGrayPic()
@@ -39,6 +40,7 @@ if __name__ == '__main__':
                     key= cv2.waitKey(100) & 0xFF
                     if key == ord('q'):
                         direction.update(0, isStop=True)
+                        track.stop()
                         break
                     # time.sleep(0.1)
             
@@ -46,6 +48,7 @@ if __name__ == '__main__':
                 pass
             cv2.destroyAllWindows()
             print('Stopped !!')
+            break
         # GPIO.cleanup()
 
 

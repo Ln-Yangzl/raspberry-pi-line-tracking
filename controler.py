@@ -50,7 +50,8 @@ class directionControler:
             self.L_init_duty = self.L_init_duty
             self.R_init_duty = self.R_init_duty
 
-        print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
+        # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
+        print('Lduty:%.2f Rduty:%.2f'%(self.L_pre_duty,self.R_pre_duty))
         self.pwma.ChangeDutyCycle(self.L_pre_duty)
         self.pwmb.ChangeDutyCycle(self.R_pre_duty)
 
@@ -77,7 +78,7 @@ class speedControler(threading.Thread):
 
     def run(self):
         self.isStop = False
-        while self.isStop:
+        while not(self.isStop):
             self.rspeed=(self.rcounter/20.00)
             self.lspeed=(self.lcounter/20.00)
             self.rcounter = 0

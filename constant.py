@@ -40,9 +40,9 @@ HOUGH_KWARGS = {
 }
 
 EDGE_KWARGS = {
-    "firsetLineY": 400,
+    "firstLineY": 400,
     "secondLineY": 200,
     "lossBoundary": 0.1,
-    "slopScale": 0.1,
+    "slopScale": 1,
     "slopBound": 1
 }
