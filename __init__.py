@@ -29,8 +29,8 @@ if __name__ == '__main__':
 
         elif line == 'r':
             # 启动小车
-            direction.update(0,isStop=False, isRun=True)
-            track.start()
+            # direction.update(0,isStop=False, isRun=True)
+            direction.run()
             out = cv2.VideoWriter("testlog.avi", cv2.VideoWriter_fourcc('X', 'V', 'I', 'D'), 100, (640, 480),isColor = False)
             try:
                 while True:
@@ -41,8 +41,8 @@ if __name__ == '__main__':
                     cv2.imshow("display", pic)
                     key= cv2.waitKey(100) & 0xFF
                     if key == ord('q'):
-                        direction.update(0, isStop=True)
-                        track.stop()
+                        # direction.update(0, isStop=True)
+                        direction.stop()
                         break
                     # time.sleep(0.1)
             

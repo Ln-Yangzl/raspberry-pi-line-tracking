@@ -27,10 +27,9 @@ class edgeTracking:
             slop = slop2
             x1, y1, x2, y2 = x2, y2, x1, y1
         # 限制斜率最大绝对值为slopBound，避免正切值在角度过大时值过大
-        slop = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
         # print('slop: %f'%slop)
         loss = slop * self.slopScale
-        loss = slop * self.slopScale
+        slop = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
         print('slopLoss:%.4f'%loss, end=end)
         print('\t', end='')
         if x1 != -1:

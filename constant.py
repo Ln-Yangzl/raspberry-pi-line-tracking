@@ -11,7 +11,7 @@ CONTROLER_KWARGS = {
     "RD": 23,
     "R_init_duty": 20,
     "target_duty": 50,
-    "lossBoundary": 1
+    "lossBoundary": 2
 }
 
 RETICLE_SHAPE = {
@@ -45,5 +45,5 @@ EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
     "slopScale": 10,
-    "slopBound": 20
+    "slopBound": 10
 }

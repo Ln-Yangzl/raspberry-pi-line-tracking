@@ -13,7 +13,7 @@ class visual:
     def getOriginalPic(self):
         ret, frame = self.cap.read()
         # print(frame.shape)
-        frame = cv2.imread('test4.png')
+        # frame = cv2.imread('test4.png')
         return frame
 
     def getGrayPic(self):
