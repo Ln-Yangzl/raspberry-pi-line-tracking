@@ -46,7 +46,7 @@ class edgeTracking:
     def __computeSlop(self, x1, y1, x2, y2):
         if y1 == y2 or x1 == -1 or x2 == -1:
             return 1<<31
-        return (x2-x1)/(y2-y1)
+        return (x1-x2)/(y2-y1)
 
     # 如果未找到返回坐标（-1，-1）
     def __getEdgePos(self, edges):

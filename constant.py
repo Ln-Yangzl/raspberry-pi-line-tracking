@@ -5,12 +5,12 @@ CONTROLER_KWARGS = {
     "LP": 30,
     "LI": 0.06,
     "LD": 20,
-    "L_init_duty": 20,
+    "L_init_duty": 40,
     "RP": 40,
     "RI": 0.01,
     "RD": 23,
-    "R_init_duty": 20,
-    "target_duty": 50,
+    "R_init_duty": 40,
+    "target_duty": 40,
     "lossBoundary": 2
 }
 

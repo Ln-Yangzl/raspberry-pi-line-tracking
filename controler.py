@@ -43,11 +43,13 @@ class controler:
             self.stage = True
         else:
             self.stage = False
-            loss = -loss
+            loss = -loss * 7
             if loss > 0:
-                Lnext = max(Lnext - loss, 0)
+                # Lnext = max(Lnext - loss, 0)
+                Rnext = min(Lnext + loss, 100)
             else:
-                Rnext = max(Rnext + loss, 0)
+                # Rnext = max(Rnext + loss, 0)
+                Lnext = min(Rnext - loss, 100)
 
         # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
         print('Lduty:%.2f Rduty:%.2f'%(Lnext,Rnext), end = ' ')
@@ -60,13 +62,14 @@ class controler:
         self.R_pre_duty = self.R_init_duty
         self.speedThread.start()
         self.__updateDuty(self.L_pre_duty)
+        time.sleep(0.1)
 
     def stop(self):
         self.L_pre_duty = 0
         self.R_pre_duty = 0
         self.speedThread.stop()
         self.__updateDuty(0)
-
+        
 
     def __updateDuty(self, target):
         self.pwma.ChangeDutyCycle(target)
