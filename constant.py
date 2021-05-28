@@ -1,7 +1,7 @@
 import math
 
 
-DIRECTION_KWARGS = {
+CONTROLER_KWARGS = {
     "LP": 30,
     "LI": 0.06,
     "LD": 20,
@@ -10,7 +10,8 @@ DIRECTION_KWARGS = {
     "RI": 0.01,
     "RD": 23,
     "R_init_duty": 20,
-    "target_duty": 50
+    "target_duty": 50,
+    "lossBoundary": 1
 }
 
 RETICLE_SHAPE = {
@@ -43,7 +44,6 @@ HOUGH_KWARGS = {
 EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
-    "lossBoundary": 0.1,
-    "slopScale": 1,
-    "slopBound": 1
+    "slopScale": 10,
+    "slopBound": 20
 }

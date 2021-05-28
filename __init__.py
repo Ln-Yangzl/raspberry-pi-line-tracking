@@ -1,4 +1,4 @@
-from controler import directionControler
+from controler import controler
 from visual import visual
 import cv2
 # from tracking import tracking
@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     camera = visual(**RETICLE_SHAPE)
     track = tracking(**EDGE_KWARGS)
-    direction = directionControler(**DIRECTION_KWARGS)
+    direction = controler(**CONTROLER_KWARGS)
 
     while True:
         print('q -- exit, i -- aim line r -- start run')

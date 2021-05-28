@@ -1,15 +1,13 @@
-from controler import speedControler
 import cv2
 
 class edgeTracking:
 
-    def __init__(self, firstLineY, secondLineY, lossBoundary, slopScale, slopBound):
+    def __init__(self, firstLineY, secondLineY, slopScale, slopBound):
         self.firsetLineY = firstLineY
         self.secondLineY = secondLineY
-        self.lossBoundary = lossBoundary
         self.slopScale = slopScale
         self.slopBound = slopBound
-        self.speedThread = speedControler()
+
 
     def computeLoss(self, frame, end = '\n'):
         height, width = frame.shape[:2]
@@ -28,18 +26,13 @@ class edgeTracking:
         else:
             slop = slop2
             x1, y1, x2, y2 = x2, y2, x1, y1
-        # 限制斜率最大绝对值为1，避免正切值在角度过大时值过大
+        # 限制斜率最大绝对值为slopBound，避免正切值在角度过大时值过大
         slop = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
         # print('slop: %f'%slop)
-        loss = slop
-        if abs(loss) < self.lossBoundary:
-            loss = self.speedThread.speedLoss()
-            print('speedLoss:%.4f'%loss, end=' ')
-        else:
-            loss = slop * self.slopScale
-            print('slopLoss:%.4f'%loss, end=' ')
+        loss = slop * self.slopScale
+        loss = slop * self.slopScale
+        print('slopLoss:%.4f'%loss, end=end)
         print('\t', end='')
-        print('lspeed:%.2f rspeed:%.2f'%(self.speedThread.getSpeed()), end=end)
         if x1 != -1:
             cv2.circle(frame, (x1, y1), 10, (100, 0, 0), 1)
         if x2 != -1:
@@ -50,12 +43,7 @@ class edgeTracking:
         cv2.line(frame, (0, self.secondLineY), (width, self.secondLineY), (100,0,0), 1)
         return loss, frame
 
-    def start(self):
-        self.speedThread.start()
 
-    def stop(self):
-        self.speedThread.stop()
-        
     def __computeSlop(self, x1, y1, x2, y2):
         if y1 == y2 or x1 == -1 or x2 == -1:
             return 1<<31
@@ -85,5 +73,3 @@ class edgeTracking:
         return pos
 
 
-    def __del__(self):
-        self.speedThread.stop()

@@ -7,9 +7,9 @@ from pid import PID
 EA, I2, I1, EB, I4, I3, LS, RS = (13, 19, 26, 16, 20, 21, 6, 12)
 FREQUENCY = 50
 
-class directionControler:
+class controler:
 
-    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty = 80):
+    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
@@ -21,45 +21,61 @@ class directionControler:
         self.L_control = PID(LP, LI, LD, L_init_duty)   # for pwma
         self.R_control = PID(RP, RI, RD, R_init_duty)   # for pwmb
         self.ideal_duty = target_duty
-        self.L_pre_duty = L_init_duty
-        self.R_pre_duty = R_init_duty
+        self.L_pre_duty = 0
+        self.R_pre_duty = 0
         self.L_init_duty = L_init_duty
         self.R_init_duty = R_init_duty
+        self.lossBoundary = lossBoundary
+        self.speedThread = speedControler()
+        # True: 上一次进入update为速度loss或初始状态
+        # False: 上一次进入update为斜率loss状态
+        self.stage = True
 
 
-    def update(self, loss, isStop = False, isRun = False):
-        # print('loss:', loss, end='')
-        if self.L_pre_duty < self.ideal_duty:
-            self.L_pre_duty = self.L_control.update(loss)
+    def update(self, loss):
+        Lnext = self.L_pre_duty
+        Rnext = self.R_pre_duty
+        if abs(loss) < self.lossBoundary:
+            if self.stage:
+                speedLoss = self.speedThread.speedLoss()
+                self.L_pre_duty = self.L_control.update(speedLoss)
+                Lnext = self.L_pre_duty
+            self.stage = True
         else:
-            self.R_pre_duty = self.R_control.update(-loss)
-        # if loss > 0:
-        #     if self.L_pre_duty < self.ideal_duty:
-        #         self.L_pre_duty = self.L_control.update(-loss)
-        #     else:
-        #         self.R_pre_duty = self.R_control.update(loss)
-        # elif loss < 0:
-        #     if self.L_pre_duty > self.ideal_duty:
-        #         self.L_pre_duty = self.L_control.update(-loss)
-        #     else:
-        #         self.R_pre_duty = self.R_control.update(loss)
-        if isStop:
-            self.L_pre_duty = 0
-            self.R_pre_duty = 0
-        if isRun:
-            self.L_init_duty = self.L_init_duty
-            self.R_init_duty = self.R_init_duty
+            self.stage = False
+            if loss > 0:
+                Lnext = Lnext - loss
+            else:
+                Rnext = Rnext + loss
 
         # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
-        print('Lduty:%.2f Rduty:%.2f'%(self.L_pre_duty,self.R_pre_duty))
-        self.pwma.ChangeDutyCycle(self.L_pre_duty)
-        self.pwmb.ChangeDutyCycle(self.R_pre_duty)
+        print('Lduty:%.2f Rduty:%.2f'%(Lnext,Rnext), end = ' ')
+        print('Lspeed:%.2f Rspeed:%.2f'%(self.speedThread.getSpeed()))
+        self.pwma.ChangeDutyCycle(Lnext)
+        self.pwmb.ChangeDutyCycle(Rnext)
 
+    def run(self):
+        self.L_pre_duty = self.L_init_duty
+        self.R_pre_duty = self.R_init_duty
+        self.speedThread.start()
+        self.__updateDuty(self.L_pre_duty)
+
+    def stop(self):
+        self.L_pre_duty = 0
+        self.R_pre_duty = 0
+        self.speedThread.stop()
+        self.__updateDuty(0)
+
+
+    def __updateDuty(self, target):
+        self.pwma.ChangeDutyCycle(target)
+        self.pwmb.ChangeDutyCycle(target)
 
     def __del__(self):
         self.pwma.stop()
         self.pwmb.stop()
         GPIO.cleanup()
+
 
 class speedControler(threading.Thread):
 
@@ -102,3 +118,58 @@ class speedControler(threading.Thread):
 
     def __del__(self):
         GPIO.cleanup()
+
+
+# class directionControler:
+
+#     def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty = 80):
+#         GPIO.setmode(GPIO.BCM)
+#         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
+#         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
+#         GPIO.output([I1, I4], GPIO.HIGH)
+#         self.pwma = GPIO.PWM(EA, FREQUENCY)
+#         self.pwmb = GPIO.PWM(EB, FREQUENCY)
+#         self.pwma.start(0)
+#         self.pwmb.start(0)
+#         self.L_control = PID(LP, LI, LD, L_init_duty)   # for pwma
+#         self.R_control = PID(RP, RI, RD, R_init_duty)   # for pwmb
+#         self.ideal_duty = target_duty
+#         self.L_pre_duty = L_init_duty
+#         self.R_pre_duty = R_init_duty
+#         self.L_init_duty = L_init_duty
+#         self.R_init_duty = R_init_duty
+
+
+#     def update(self, loss, isStop = False, isRun = False):
+#         # print('loss:', loss, end='')
+#         if self.L_pre_duty < self.ideal_duty:
+#             self.L_pre_duty = self.L_control.update(loss)
+#         else:
+#             self.R_pre_duty = self.R_control.update(-loss)
+#         # if loss > 0:
+#         #     if self.L_pre_duty < self.ideal_duty:
+#         #         self.L_pre_duty = self.L_control.update(-loss)
+#         #     else:
+#         #         self.R_pre_duty = self.R_control.update(loss)
+#         # elif loss < 0:
+#         #     if self.L_pre_duty > self.ideal_duty:
+#         #         self.L_pre_duty = self.L_control.update(-loss)
+#         #     else:
+#         #         self.R_pre_duty = self.R_control.update(loss)
+#         if isStop:
+#             self.L_pre_duty = 0
+#             self.R_pre_duty = 0
+#         if isRun:
+#             self.L_init_duty = self.L_init_duty
+#             self.R_init_duty = self.R_init_duty
+
+#         # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
+#         print('Lduty:%.2f Rduty:%.2f'%(self.L_pre_duty,self.R_pre_duty))
+#         self.pwma.ChangeDutyCycle(self.L_pre_duty)
+#         self.pwmb.ChangeDutyCycle(self.R_pre_duty)
+
+
+#     def __del__(self):
+#         self.pwma.stop()
+#         self.pwmb.stop()
+#         GPIO.cleanup()
