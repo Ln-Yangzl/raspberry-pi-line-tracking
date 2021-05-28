@@ -38,9 +38,12 @@ class controler:
         Rnext = self.R_pre_duty
         if abs(loss) < self.lossBoundary:
             if self.stage:
-                speedLoss = self.speedThread.speedLoss()
-                self.L_pre_duty = self.L_control.update(speedLoss)
-                Lnext = self.L_pre_duty
+                speedLoss = -self.speedThread.speedLoss()
+                self.R_pre_duty = self.R_control.update(speedLoss)
+                Rnext = self.R_pre_duty
+                # speedLoss = self.speedThread.speedLoss()
+                # self.L_pre_duty = self.L_control.update(speedLoss)
+                # Lnext = self.L_pre_duty
             self.stage = True
         else:
             self.stage = False

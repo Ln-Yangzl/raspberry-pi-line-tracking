@@ -53,13 +53,13 @@ class edgeTracking:
             return 1<<31
         return (x1-x2)/(y2-y1)
 
-    # 如果未找到返回坐标（-1，-1）
+    # 如果未找到返回的x坐标为-1
     def __getEdgePos(self, edges):
         x1, y1 = self.__findEdgeMid(edges[self.firsetLineY]), self.firsetLineY
         x2, y2 = self.__findEdgeMid(edges[self.secondLineY]), self.secondLineY
         return x1, y1, x2, y2
         
-
+    # 寻找两条道路边缘线的中点
     def __findEdgeMid(self, edge):
         width = len(edge)
         mid = width // 2
@@ -74,6 +74,9 @@ class edgeTracking:
                     if abs(currentPos - mid) < abs(pos - mid):
                         pos = currentPos
                     leftEdge = -1
+        # 只有一根线被识别，使用该线
+        if pos == -1:
+            pos = leftEdge
         return pos
 
 

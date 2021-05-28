@@ -42,6 +42,7 @@ HOUGH_KWARGS = {
     "offsetScale": 0.001
 }
 
+# for edgeTracking mode
 EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
