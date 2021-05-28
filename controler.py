@@ -9,7 +9,7 @@ FREQUENCY = 50
 
 class controler:
 
-    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary):
+    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary, lossScale):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
@@ -25,6 +25,7 @@ class controler:
         self.R_pre_duty = 0
         self.L_init_duty = L_init_duty
         self.R_init_duty = R_init_duty
+        self.lossScale = lossScale
         self.lossBoundary = lossBoundary
         self.speedThread = speedControler()
         # True: 上一次进入update为速度loss或初始状态
@@ -43,7 +44,7 @@ class controler:
             self.stage = True
         else:
             self.stage = False
-            loss = -loss * 7
+            loss = -loss * self.lossScale
             if loss > 0:
                 # Lnext = max(Lnext - loss, 0)
                 Rnext = min(Lnext + loss, 100)

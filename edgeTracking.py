@@ -7,6 +7,7 @@ class edgeTracking:
         self.secondLineY = secondLineY
         self.slopScale = slopScale
         self.slopBound = slopBound
+        self.preSlop = 0
 
 
     def computeLoss(self, frame, end = '\n'):
@@ -26,12 +27,16 @@ class edgeTracking:
         else:
             slop = slop2
             x1, y1, x2, y2 = x2, y2, x1, y1
-        # 限制斜率最大绝对值为slopBound，避免正切值在角度过大时值过大
-        # print('slop: %f'%slop)
+        # 如果丢失视野，则使用上一次的斜率
+        if abs(slop) == 1<<31:
+            slop = self.preSlop
+        self.preSlop = slop
         loss = slop * self.slopScale
+        # 限制斜率正切值，避免过大
         slop = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
         print('slopLoss:%.4f'%loss, end=end)
         print('\t', end='')
+        # 在图中画出标识标线
         if x1 != -1:
             cv2.circle(frame, (x1, y1), 10, (100, 0, 0), 1)
         if x2 != -1:
