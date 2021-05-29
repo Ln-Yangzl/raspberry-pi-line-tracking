@@ -5,14 +5,14 @@ CONTROLER_KWARGS = {
     "LP": 30,
     "LI": 0.06,
     "LD": 20,
-    "L_init_duty": 40,
+    "L_init_duty": 100,
     "RP": 40,
     "RI": 0.01,
     "RD": 23,
-    "R_init_duty": 40,
-    "target_duty": 40,
-    "lossBoundary": 2,
-    "lossScale": 7
+    "R_init_duty": 100,
+    "target_duty": 60,
+    "lossBoundary": 0.14,
+    "lossScale": 40
 }
 
 RETICLE_SHAPE = {
@@ -46,6 +46,5 @@ HOUGH_KWARGS = {
 EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
-    "slopScale": 10,
-    "slopBound": 10
+    "slopBound": 0.7
 }

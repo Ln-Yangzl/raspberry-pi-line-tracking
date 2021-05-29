@@ -21,7 +21,7 @@ class visual:
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY) 
         frame = cv2.GaussianBlur(frame,(3,3),0)
         # frame = cv2.equalizeHist(frame)
-        ret,frame=cv2.threshold(frame,130,255,cv2.THRESH_BINARY_INV)
+        ret,frame=cv2.threshold(frame,110,255,cv2.THRESH_BINARY_INV)
         # reticleFrame = self.__showReticle(frame)
         return frame
 

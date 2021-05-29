@@ -49,11 +49,11 @@ class controler:
             self.stage = False
             loss = -loss * self.lossScale
             if loss > 0:
-                # Lnext = max(Lnext - loss, 0)
-                Rnext = min(Lnext + loss, 100)
+                Lnext = max(Lnext - loss, 0)
+                # Rnext = min(Lnext + loss, 100)
             else:
-                # Rnext = max(Rnext + loss, 0)
-                Lnext = min(Rnext - loss, 100)
+                Rnext = max(Rnext + loss, 0)
+                # Lnext = min(Rnext - loss, 100)
 
         # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
         print('Lduty:%.2f Rduty:%.2f'%(Lnext,Rnext), end = ' ')

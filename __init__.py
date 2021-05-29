@@ -39,7 +39,7 @@ if __name__ == '__main__':
                     direction.update(loss)
                     out.write(pic)
                     cv2.imshow("display", pic)
-                    key= cv2.waitKey(100) & 0xFF
+                    key= cv2.waitKey(1) & 0xFF
                     if key == ord('q'):
                         # direction.update(0, isStop=True)
                         direction.stop()
