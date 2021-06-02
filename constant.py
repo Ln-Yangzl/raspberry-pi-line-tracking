@@ -12,7 +12,7 @@ CONTROLER_KWARGS = {
     "R_init_duty": 100,
     "target_duty": 60,
     "lossBoundary": 0.14,
-    "lossScale": 40
+    "lossScale": 35
 }
 
 RETICLE_SHAPE = {
