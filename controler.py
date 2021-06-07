@@ -36,24 +36,31 @@ class controler:
     def update(self, loss):
         Lnext = self.L_pre_duty
         Rnext = self.R_pre_duty
-        if abs(loss) < self.lossBoundary:
-            if self.stage:
-                speedLoss = -self.speedThread.speedLoss()
-                self.R_pre_duty = self.R_control.update(speedLoss)
-                Rnext = self.R_pre_duty
-                # speedLoss = self.speedThread.speedLoss()
-                # self.L_pre_duty = self.L_control.update(speedLoss)
-                # Lnext = self.L_pre_duty
-            self.stage = True
+        # if abs(loss) < self.lossBoundary:
+        #     if self.stage:
+        #         speedLoss = -self.speedThread.speedLoss()
+        #         self.R_pre_duty = self.R_control.update(speedLoss)
+        #         Rnext = self.R_pre_duty
+        #         # speedLoss = self.speedThread.speedLoss()
+        #         # self.L_pre_duty = self.L_control.update(speedLoss)
+        #         # Lnext = self.L_pre_duty
+        #     self.stage = True
+        # else:
+        #     self.stage = False
+        #     loss = -loss * self.lossScale
+        #     if loss > 0:
+        #         Lnext = max(Lnext - loss, 0)
+        #         # Rnext = min(Lnext + loss, 100)
+        #     else:
+        #         Rnext = max(Rnext + loss, 0)
+        #         # Lnext = min(Rnext - loss, 100)
+        loss = -loss * self.lossScale
+        if loss > 0:
+            Lnext = max(Lnext - loss, 0)
+            # Rnext = min(Lnext + loss, 100)
         else:
-            self.stage = False
-            loss = -loss * self.lossScale
-            if loss > 0:
-                Lnext = max(Lnext - loss, 0)
-                # Rnext = min(Lnext + loss, 100)
-            else:
-                Rnext = max(Rnext + loss, 0)
-                # Lnext = min(Rnext - loss, 100)
+            Rnext = max(Rnext + loss, 0)
+            # Lnext = min(Rnext - loss, 100)
 
         # print(' Lduty:',self.L_pre_duty,' Rduty:',self.R_pre_duty)
         print('Lduty:%.2f Rduty:%.2f'%(Lnext,Rnext), end = ' ')
