@@ -2,10 +2,11 @@ import cv2
 
 class edgeTracking:
 
-    def __init__(self, firstLineY, secondLineY, slopBound, slopScale1, slopScale2):
+    def __init__(self, firstLineY, secondLineY, slopBound1, slopBound2, slopScale1, slopScale2):
         self.firsetLineY = firstLineY
         self.secondLineY = secondLineY
-        self.slopBound = slopBound
+        self.slopBound1 = slopBound1
+        self.slopBound2 = slopBound2
         self.preSlop = 0
         self.slopScale1 = slopScale1
         self.slopScale2 = slopScale2
@@ -34,9 +35,12 @@ class edgeTracking:
         self.preSlop = slop
         # 限制斜率正切值，避免过大
         print('slop:%.4f'%slop, end=' ')
+        absSlop = abs(slop)
         loss = 0
-        if abs(slop) < self.slopBound:
+        if absSlop < self.slopBound1:
             loss = slop * self.slopScale1
+        elif absSlop >= self.slopBound1 and absSlop < self.slopBound2:
+            loss = self.slopBound1 * ((slop>0)*2-1)
         else:
             loss = slop * self.slopScale2
         # loss = min(abs(slop), self.slopBound) * ((slop>0)*2-1)
