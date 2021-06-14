@@ -9,7 +9,7 @@ CONTROLER_KWARGS = {
     "RP": 40,
     "RI": 0.01,
     "RD": 23,
-    "R_init_duty": 100,
+    "R_init_duty": 90,
     "target_duty": 60,
     "lossBoundary": 0.12,
     "lossScale": 35
@@ -46,5 +46,7 @@ HOUGH_KWARGS = {
 EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
-    "slopBound": 0.9
+    "slopBound": 0.9,
+    "slopScale1": 10,
+    "slopScale2": 20
 }
