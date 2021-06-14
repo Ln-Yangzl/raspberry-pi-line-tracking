@@ -46,7 +46,8 @@ HOUGH_KWARGS = {
 EDGE_KWARGS = {
     "firstLineY": 350,
     "secondLineY": 100,
-    "slopBound": 0.9,
+    "slopBound1": 0.9,
+    "slopBound2": 2.0,
     "slopScale1": 10,
     "slopScale2": 20
 }
