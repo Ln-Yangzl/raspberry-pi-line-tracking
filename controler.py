@@ -9,7 +9,7 @@ FREQUENCY = 50
 
 class controler:
 
-    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary, lossScale):
+    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary, lossScale, sleepBound, sleepTime, sleepLoss):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
@@ -30,7 +30,10 @@ class controler:
         self.speedThread = speedControler()
         # True: 上一次进入update为速度loss或初始状态
         # False: 上一次进入update为斜率loss状态
-        self.stage = True
+        # self.stage = True
+        self.sleepBound = sleepBound
+        self.sleepTime = sleepTime
+        self.sleepLoss = sleepLoss
 
 
     def update(self, loss):
@@ -54,6 +57,11 @@ class controler:
         #     else:
         #         Rnext = max(Rnext + loss, 0)
         #         # Lnext = min(Rnext - loss, 100)
+        isSleep = False
+        if abs(loss) >= self.sleepTime:
+            isSleep = True
+            if self.sleepLoss != 0:
+                loss = self.sleepLoss * ((loss>0)*2-1)
         loss = -loss * self.lossScale
         if loss > 0:
             Lnext = max(Lnext - loss, 0)
@@ -67,6 +75,9 @@ class controler:
         print('Lspeed:%.2f Rspeed:%.2f'%(self.speedThread.getSpeed()))
         self.pwma.ChangeDutyCycle(Lnext)
         self.pwmb.ChangeDutyCycle(Rnext)
+        if isSleep:
+            time.sleep(self.sleepTime)
+            
 
     def run(self):
         self.L_pre_duty = self.L_init_duty
