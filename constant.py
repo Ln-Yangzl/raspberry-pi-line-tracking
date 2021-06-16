@@ -15,7 +15,8 @@ CONTROLER_KWARGS = {
     "lossScale": 35,
     "sleepBound": 2.5,  # sleepBound的检测在原loss乘以lossScale之前
     "sleepTime": 1.0,
-    "sleepLoss": 0      #可以为sleep指定loss大小，若为0，则使用寻线loss大小
+    "sleepLoss": 0,      #可以为sleep指定loss大小，若为0，则使用寻线loss大小
+    "stopSleepTime": 2.0
 }
 
 RETICLE_SHAPE = {

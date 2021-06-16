@@ -9,7 +9,7 @@ FREQUENCY = 50
 
 class controler:
 
-    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary, lossScale, sleepBound, sleepTime, sleepLoss):
+    def __init__(self, LP, LI, LD, L_init_duty, RP, RI, RD, R_init_duty, target_duty, lossBoundary, lossScale, sleepBound, sleepTime, sleepLoss, stopSleepTime):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
         GPIO.output([EA, I2, EB, I3], GPIO.LOW)
@@ -34,6 +34,7 @@ class controler:
         self.sleepBound = sleepBound
         self.sleepTime = sleepTime
         self.sleepLoss = sleepLoss
+        self.stopSleepTime = stopSleepTime
 
 
     def update(self, loss):
@@ -91,6 +92,13 @@ class controler:
         self.R_pre_duty = 0
         self.speedThread.stop()
         self.__updateDuty(0)
+        
+
+    def __stopSleep(self):
+        self.__updateDuty(0)
+        time.sleep(self.stopSleepTime)
+        self.pwma.ChangeDutyCycle(self.L_init_duty)
+        self.pwmb.ChangeDutyCycle(self.R_init_duty)
         
 
     def __updateDuty(self, target):
