@@ -59,7 +59,7 @@ class controler:
         #         Rnext = max(Rnext + loss, 0)
         #         # Lnext = min(Rnext - loss, 100)
         isSleep = False
-        if abs(loss) >= self.sleepTime:
+        if abs(loss) >= self.sleepBound:
             isSleep = True
             if self.sleepLoss != 0:
                 loss = self.sleepLoss * ((loss>0)*2-1)
@@ -78,6 +78,7 @@ class controler:
         self.pwmb.ChangeDutyCycle(Rnext)
         if isSleep:
             time.sleep(self.sleepTime)
+            self.__stopSleep()
             
 
     def run(self):
